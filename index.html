@@ -1,10 +1,8 @@
 <!DOCTYPE html>
-<!-- הוספת משתנה CSS עבור כיווניות ויישור לוגי -->
 <html lang="en" dir="ltr" style="--flow-direction: ltr; --start-side: left; --end-side: right;">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- כותרת הדף בלשונית תעודכן ע"י ה-JS -->
     <title>Stock Data Desk - Professional Trading Desk</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -45,9 +43,8 @@
         }
     </script>
     <style>
-        /* שימוש במאפיינים לוגיים של CSS ליישור טקסט ואלמנטים בהתאם לכיווניות (RTL/LTR) */
         .text-start { text-align: var(--start-side); }
-        .border-start-4 { border-inline-start-width: 4px; } /* הפס הכחול בתיאור */
+        .border-start-4 { border-inline-start-width: 4px; }
 
         body {
             background-color: #050b14;
@@ -66,29 +63,25 @@
         .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(51, 65, 85, 0.8); border-radius: 4px; }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #2563eb; }
 
-        /* תיקון למיקום כפתור החלפת השפה - תמיד בצד ימין (right-4), ללא תלות ב-dir/rtl */
         #langSwitcher {
-            right: 1rem !important; /* right-4 */
+            right: 1rem !important; 
             left: auto !important;
         }
     </style>
 </head>
 <body class="text-trading-textBase font-sans antialiased min-h-screen flex flex-col relative">
 
-    <!-- כפתור החלפת שפה צף -->
-    <!-- המיקום קובע ב-CSS ל-right-4 תמיד כדי למנוע קפיצות -->
     <button id="langSwitcher" onclick="toggleLanguage()" class="fixed top-16 z-50 bg-trading-card/50 backdrop-blur-sm border border-trading-border p-2 rounded-full shadow-lg hover:bg-trading-primary/20 transition-all duration-300" title="Switch Language">
-        <!-- האייקון יעודכן ע"י ה-JS לדגל של השפה הנגדית -->
         <span id="langFlag" class="text-2xl">🇺🇸</span>
     </button>
 
-    <div class="w-full bg-black/80 border-b border-trading-border overflow-hidden flex items-center h-12 text-sm font-mono whitespace-nowrap shadow-md relative z-10 text-left dir-ltr">
+    <div class="w-full bg-black/80 border-b border-trading-border overflow-hidden flex items-center h-12 text-sm font-mono whitespace-nowrap shadow-md relative z-10 text-left" dir="ltr">
         <div class="flex animate-marquee w-max" id="tickerWrapper">
             <div class="flex space-x-8 px-4 items-center live-tickers">
-                <span class="text-trading-textMuted data-i18n="tickerLoading">Loading live market data...</span>
+                <span class="text-trading-textMuted" data-i18n="tickerLoading">Loading live market data...</span>
             </div>
             <div class="flex space-x-8 px-4 items-center live-tickers" aria-hidden="true">
-                <span class="text-trading-textMuted data-i18n="tickerLoading">Loading live market data...</span>
+                <span class="text-trading-textMuted" data-i18n="tickerLoading">Loading live market data...</span>
             </div>
         </div>
     </div>
@@ -98,15 +91,14 @@
             <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-trading-primary to-trading-success"></div>
 
             <div class="mb-8 text-center mt-2">
-                <div class="flex justify-center items-center gap-2 mb-2">
+                <div class="flex justify-center items-center gap-2 mb-2" dir="ltr">
                     <span class="relative flex h-3 w-3"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-trading-success opacity-75"></span><span class="relative inline-flex rounded-full h-3 w-3 bg-trading-success"></span></span>
                     <span id="liveClock" class="text-xs text-trading-success font-mono tracking-widest min-w-[100px] inline-block">--:--:--</span>
                 </div>
-                <!-- כותרת המערכת - תעודכן דינמית -->
+                
                 <h1 class="text-3xl font-extrabold text-white mb-6 drop-shadow-md" data-i18n="mainHeader">Stock Data Desk</h1>
                 
                 <div class="max-w-lg mx-auto mb-8 bg-gradient-to-br from-slate-800/80 to-slate-900/80 p-5 rounded-xl border border-trading-primary/30 shadow-[0_0_15px_rgba(37,99,235,0.15)] relative overflow-hidden">
-                    <!-- הפס הכחול זז לצד המתאים לפי הכיווניות (border-start-4) -->
                     <div class="absolute top-0 w-1 h-full bg-trading-primary border-start-4 ltr:left-0 rtl:right-0"></div>
                     <p class="text-sm leading-relaxed text-slate-200 text-start">
                         <span class="font-bold text-blue-400 block mb-1 text-base" data-i18n="welcomeTitle">Welcome to the system</span>
@@ -117,27 +109,23 @@
 
             <form id="stockForm" class="space-y-6">
                 <div>
-                    <!-- כותרת שדה קלט - תעודכן דינמית -->
-                    <label class="block text-sm font-medium mb-2 text-trading-textMuted" data-i18n="labelTickers">Stock Tickers (comma separated)</label>
-                    <input type="text" id="tickers" required placeholder="AAPL, MSFT, TSLA" data-i18n-placeholder="placeholderTickers" class="w-full px-4 py-3 bg-trading-input border border-trading-border rounded-xl focus:ring-2 focus:ring-trading-primary outline-none text-white font-mono text-left uppercase shadow-inner dir-ltr">
+                    <label class="block text-sm font-medium mb-2 text-trading-textMuted text-start" data-i18n="labelTickers">Stock Tickers (comma separated)</label>
+                    <input type="text" id="tickers" required placeholder="AAPL, MSFT, TSLA" data-i18n-placeholder="placeholderTickers" class="w-full px-4 py-3 bg-trading-input border border-trading-border rounded-xl focus:ring-2 focus:ring-trading-primary outline-none text-white font-mono text-left uppercase shadow-inner" dir="ltr">
                 </div>
 
                 <div class="grid grid-cols-2 gap-5">
                     <div>
-                        <!-- כותרת שדה תאריך התחלה - תעודכן דינמית -->
-                        <label class="block text-sm font-medium mb-2 text-trading-textMuted" data-i18n="labelStart">Start Date</label>
-                        <input type="date" id="startDate" required class="w-full px-4 py-3 bg-trading-input border border-trading-border rounded-xl focus:ring-2 focus:ring-trading-primary outline-none text-white font-mono shadow-inner dir-ltr">
+                        <label class="block text-sm font-medium mb-2 text-trading-textMuted text-start" data-i18n="labelStart">Start Date</label>
+                        <input type="date" id="startDate" required class="w-full px-4 py-3 bg-trading-input border border-trading-border rounded-xl focus:ring-2 focus:ring-trading-primary outline-none text-white font-mono shadow-inner text-left" dir="ltr">
                     </div>
                     <div>
-                        <!-- כותרת שדה תאריך סיום - תעודכן דינמית -->
-                        <label class="block text-sm font-medium mb-2 text-trading-textMuted" data-i18n="labelEnd">End Date</label>
-                        <input type="date" id="endDate" required class="w-full px-4 py-3 bg-trading-input border border-trading-border rounded-xl focus:ring-2 focus:ring-trading-primary outline-none text-white font-mono shadow-inner dir-ltr">
+                        <label class="block text-sm font-medium mb-2 text-trading-textMuted text-start" data-i18n="labelEnd">End Date</label>
+                        <input type="date" id="endDate" required class="w-full px-4 py-3 bg-trading-input border border-trading-border rounded-xl focus:ring-2 focus:ring-trading-primary outline-none text-white font-mono shadow-inner text-left" dir="ltr">
                     </div>
                 </div>
 
                 <div>
-                    <!-- כותרת שדה תדירות - תעודכן דינמית -->
-                    <label class="block text-sm font-medium mb-2 text-trading-textMuted" data-i18n="labelFrequency">Data Frequency</label>
+                    <label class="block text-sm font-medium mb-2 text-trading-textMuted text-start" data-i18n="labelFrequency">Data Frequency</label>
                     <select id="frequency" required class="w-full px-4 py-3 bg-trading-input border border-trading-border rounded-xl focus:ring-2 focus:ring-trading-primary outline-none text-white appearance-none cursor-pointer shadow-inner">
                         <option value="1d" data-i18n="freqDaily">Daily</option>
                         <option value="1wk" data-i18n="freqWeekly">Weekly</option>
@@ -177,8 +165,8 @@
                     </div>
                 </div>
 
-                <div class="mb-2 text-sm text-trading-textMuted" data-i18n="previewTitle">Preview (up to first 10 rows):</div>
-                <div class="overflow-x-auto rounded-xl border border-trading-border bg-trading-input max-h-60 custom-scrollbar relative dir-ltr">
+                <div class="mb-2 text-sm text-trading-textMuted text-start" data-i18n="previewTitle">Preview (up to first 10 rows):</div>
+                <div class="overflow-x-auto rounded-xl border border-trading-border bg-trading-input max-h-60 custom-scrollbar relative" dir="ltr">
                     <table class="w-full text-xs text-left border-collapse whitespace-nowrap" id="previewTable">
                         <thead class="sticky top-0 bg-[#162032] text-trading-textBase shadow-md">
                             <tr id="tableHeader"></tr>
@@ -191,8 +179,6 @@
     </div>
 
     <script>
-        // --- תשתיות בינאום (Internationalization - i18n) ---
-
         const translations = {
             en: {
                 title: "Stock Data Desk - Professional Trading Desk",
@@ -215,7 +201,6 @@
                 btnCsv: "Download CSV",
                 previewTitle: "Preview (up to first 10 rows):",
                 switcherTitle: "Switch to Hebrew",
-                // הודעות JS
                 errDateOrder: "Start date is later than end date.",
                 errFutureDate: "End date cannot be in the future.",
                 errEnglishOnly: "Stock tickers must be in English only.",
@@ -225,7 +210,7 @@
                 warnPartial: "Report generated, but data is missing for: "
             },
             he: {
-                title: "דסק נתוני מניות - דסק מסחר מקצועי",
+                title: "דסק נתוני מניות - מסחר מקצועי",
                 tickerLoading: "טוען נתוני שוק חיים...",
                 mainHeader: "דסק נתוני מניות",
                 welcomeTitle: "ברוכים הבאים למערכת",
@@ -245,7 +230,6 @@
                 btnCsv: "הורד CSV",
                 previewTitle: "תצוגה מקדימה (עד 10 שורות ראשונות):",
                 switcherTitle: "עבור לאנגלית",
-                // הודעות JS
                 errDateOrder: "תאריך התחלה מאוחר מתאריך סיום.",
                 errFutureDate: "תאריך סיום לא יכול להיות עתידי.",
                 errEnglishOnly: "סימולי מניות באנגלית בלבד.",
@@ -256,7 +240,6 @@
             }
         };
 
-        // שפת ברירת מחדל או שפה שמורה ב-LocalStorage
         let currentLang = localStorage.getItem('preferredLang') || 'en';
 
         function setLanguage(lang) {
@@ -264,11 +247,8 @@
             localStorage.setItem('preferredLang', lang);
             
             const htmlTag = document.documentElement;
-            
-            // עדכון מאפייני ה-HTML הבסיסיים
             htmlTag.lang = lang;
             
-            // עדכון משתני CSS עבור יישור לוגי (text-start / border-start)
             if (lang === 'he') {
                 htmlTag.dir = 'rtl';
                 htmlTag.style.setProperty('--flow-direction', 'rtl');
@@ -281,10 +261,8 @@
                 htmlTag.style.setProperty('--end-side', 'right');
             }
             
-            // עדכון כותרת הלשונית
             document.title = translations[lang].title;
 
-            // עדכון אלמנטים עם data-i18n (טקסט פנימי - כולל כותרת המערכת וכותרות השדות)
             document.querySelectorAll('[data-i18n]').forEach(el => {
                 const key = el.getAttribute('data-i18n');
                 if (translations[lang][key]) {
@@ -292,7 +270,6 @@
                 }
             });
 
-            // עדכון אלמנטים עם data-i18n-placeholder (פלייסולדרים)
             document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
                 const key = el.getAttribute('data-i18n-placeholder');
                 if (translations[lang][key]) {
@@ -300,18 +277,16 @@
                 }
             });
 
-            // עדכון כפתור מחליף השפה (מציג את דגל השפה הנגדית)
             const flagEl = document.getElementById('langFlag');
             const switcherBtn = document.getElementById('langSwitcher');
             if (lang === 'en') {
-                flagEl.textContent = '🇮🇱'; // כשבאנגלית, הצע לעבור לעברית
+                flagEl.textContent = '🇮🇱'; 
                 switcherBtn.title = translations.en.switcherTitle;
             } else {
-                flagEl.textContent = '🇺🇸'; // כשבעברית, הצע לעבור לאנגלית
+                flagEl.textContent = '🇺🇸'; 
                 switcherBtn.title = translations.he.switcherTitle;
             }
 
-            // עדכון טקסט כפתור הסאבמיט אם הוא במצב טעינה
             const btnTxt = document.getElementById('btnText');
             const submitBtn = document.getElementById('submitBtn');
             if (submitBtn.disabled && !document.getElementById('loadingIcon').classList.contains('hidden')) {
@@ -321,24 +296,17 @@
 
         function toggleLanguage() {
             setLanguage(currentLang === 'en' ? 'he' : 'en');
-            // אם הטבלה פתוחה, צריך לרענן את ה-Header שלה כי הוא נוצר דינמית ב-JS
             if (!document.getElementById('resultContainer').classList.contains('hidden') && lastFetchedData) {
                 renderTableHeader(lastFetchedData[0]);
             }
         }
 
-        // --- לוגיקת האפליקציה המקורית (עם התאמות לתרגום) ---
-
-        // *** Paste the WEB APP URL you received from Google here ***
         const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzrXTJRUnFTSTXQmZXGwZDxhPlrjI9xuRzbQo2GJRvmZreG6P3c9qSSujSQAxBYLQ9H1g/exec';
 
-        // Live Clock
         setInterval(() => { 
-            // השעון תמיד בפורמט אנגלי, רק הסיומת משתנה קלות
             document.getElementById('liveClock').textContent = new Date().toLocaleTimeString('en-US', { hour12: false }) + ' IDT'; 
         }, 1000);
         
-        // Fetch live data for the stock ticker on page load
         const liveSymbols = ['^GSPC', '^IXIC', 'AAPL', 'MSFT', 'TSLA', 'NVDA', 'AMZN', 'META', 'GOOGL'];
         const displayNames = {'^GSPC': 'S&P 500', '^IXIC': 'NASDAQ'};
 
@@ -357,7 +325,6 @@
                         if (res.data[sym]) {
                             const name = displayNames[sym] || sym;
                             const color = res.data[sym].direction === '▲' ? 'text-trading-success' : 'text-trading-danger';
-                            // סרגל המניות תמיד משמאל לימין
                             htmlStr += `<span class="text-trading-textMuted font-bold mx-5">${name} <span class="${color} ml-1 dir-ltr inline-block">${res.data[sym].price} ${res.data[sym].direction} ${res.data[sym].change}%</span></span>`;
                         }
                     });
@@ -371,13 +338,11 @@
             }
         }
         
-        let lastFetchedData = null; // Variable to store data for download
+        let lastFetchedData = null;
 
-        // CSV Download function
         document.getElementById('downloadCsvBtn').addEventListener('click', () => {
             if (!lastFetchedData) return;
             const csvContent = lastFetchedData.map(row => row.join(",")).join("\n");
-            // הוספת BOM (Byte Order Mark) כדי שאקסל יזהה UTF-8 (חשוב לעברית)
             const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' }); 
             const link = document.createElement("a");
             link.href = URL.createObjectURL(blob);
@@ -385,18 +350,14 @@
             link.click();
         });
 
-        // פונקציה עזר לרינדור כותרת הטבלה
         function renderTableHeader(headerRow) {
-            // כותרות הטבלה מגיעות מה-API (באנגלית), נשאיר אותן ככה או נתרגם ידנית אם צריך.
             const headersHTML = headerRow.map(h => `<th class="px-4 py-3 border-b border-trading-border text-left">${h}</th>`).join('');
             document.getElementById('tableHeader').innerHTML = headersHTML;
         }
 
-        // הפעלה ראשונית של השפה והטוקר
         setLanguage(currentLang);
         fetchLiveTicker();
 
-        // Set default dates
         const today = new Date();
         document.getElementById('endDate').valueAsDate = today;
         document.getElementById('startDate').valueAsDate = new Date(new Date().setFullYear(today.getFullYear() - 1));
@@ -404,7 +365,7 @@
         document.getElementById('stockForm').addEventListener('submit', async (e) => {
             e.preventDefault(); 
             
-            const lang = translations[currentLang]; // קיצור דרך לתרגומים הנוכחיים
+            const lang = translations[currentLang]; 
 
             ['errorContainer', 'warningContainer', 'resultContainer'].forEach(id => document.getElementById(id).classList.add('hidden'));
 
@@ -412,7 +373,6 @@
             const endDate = document.getElementById('endDate').value;
             const rawTickers = document.getElementById('tickers').value;
 
-            // בדיקות ולידציה עם הודעות מתורגמות
             if (new Date(startDate) > new Date(endDate)) return showError(lang.errDateOrder);
             if (new Date(endDate) > new Date()) return showError(lang.errFutureDate);
             if (!/^[A-Za-z0-9, \.]+$/.test(rawTickers)) return showError(lang.errEnglishOnly);
@@ -426,7 +386,6 @@
             const icon = document.getElementById('loadingIcon');
             const btnTxt = document.getElementById('btnText');
             
-            // מצב טעינה
             btn.disabled = true; 
             icon.classList.remove('hidden'); 
             btnTxt.textContent = lang.btnProcessing;
@@ -444,7 +403,6 @@
                     if (data.data && data.data.length > 0) {
                         renderTableHeader(data.data[0]);
                         
-                        // רינדור שורות (דאטה גולמי - תמיד משמאל לימין)
                         const rowsHTML = data.data.slice(1, 11).map(row => 
                             `<tr class="hover:bg-white/5 text-trading-textMuted text-left">${row.map(cell => `<td class="px-4 py-2">${cell}</td>`).join('')}</tr>`
                         ).join('');
@@ -458,7 +416,6 @@
                     
                     document.getElementById('resultContainer').classList.remove('hidden');
                 } else {
-                    // טיפול בשגיאות לוגיות מהשרת
                     let msg = data.message;
                     if (msg.includes('אף אחת') || msg.includes('None of the stocks')) {
                         msg = lang.errNoStocksFound;
@@ -468,7 +425,6 @@
             } catch (err) {
                 showError(err.message);
             } finally {
-                // ביטול מצב טעינה
                 btn.disabled = false; 
                 icon.classList.add('hidden'); 
                 btnTxt.textContent = lang.btnGenerate;
