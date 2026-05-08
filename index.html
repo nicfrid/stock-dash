@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- כותרת הדף בלשונית תעודכן ע"י ה-JS -->
-    <title>Stock Data Fetch - Professional Trading Desk</title>
+    <title>Stock Data Desk - Professional Trading Desk</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -47,7 +47,7 @@
     <style>
         /* שימוש במאפיינים לוגיים של CSS ליישור טקסט ואלמנטים בהתאם לכיווניות (RTL/LTR) */
         .text-start { text-align: var(--start-side); }
-        .border-start { border-inline-start-width: 4px; } /* הפס הכחול בתיאור */
+        .border-start-4 { border-inline-start-width: 4px; } /* הפס הכחול בתיאור */
 
         body {
             background-color: #050b14;
@@ -103,13 +103,13 @@
                     <span id="liveClock" class="text-xs text-trading-success font-mono tracking-widest min-w-[100px] inline-block">--:--:--</span>
                 </div>
                 <!-- כותרת המערכת - תעודכן דינמית -->
-                <h1 class="text-3xl font-extrabold text-white mb-6 drop-shadow-md data-i18n="mainHeader">Stock Data Desk</h1>
+                <h1 class="text-3xl font-extrabold text-white mb-6 drop-shadow-md" data-i18n="mainHeader">Stock Data Desk</h1>
                 
                 <div class="max-w-lg mx-auto mb-8 bg-gradient-to-br from-slate-800/80 to-slate-900/80 p-5 rounded-xl border border-trading-primary/30 shadow-[0_0_15px_rgba(37,99,235,0.15)] relative overflow-hidden">
-                    <!-- הפס הכחול זז לצד המתאים לפי הכיווניות (border-start) -->
-                    <div class="absolute top-0 w-1 h-full bg-trading-primary border-start ltr:left-0 rtl:right-0"></div>
+                    <!-- הפס הכחול זז לצד המתאים לפי הכיווניות (border-start-4) -->
+                    <div class="absolute top-0 w-1 h-full bg-trading-primary border-start-4 ltr:left-0 rtl:right-0"></div>
                     <p class="text-sm leading-relaxed text-slate-200 text-start">
-                        <span class="font-bold text-blue-400 block mb-1 text-base data-i18n="welcomeTitle">Welcome to the system</span>
+                        <span class="font-bold text-blue-400 block mb-1 text-base" data-i18n="welcomeTitle">Welcome to the system</span>
                         <span data-i18n="welcomeDesc">Generate a comprehensive trading data report for any stock in just seconds. The system provides accurate historical market data according to your defined timeframe, enabling fast and efficient trend analysis. All information is automatically aggregated and presented to you in a preview, with the option to download directly as a CSV file or work in the cloud.</span>
                     </p>
                 </div>
@@ -118,26 +118,26 @@
             <form id="stockForm" class="space-y-6">
                 <div>
                     <!-- כותרת שדה קלט - תעודכן דינמית -->
-                    <label class="block text-sm font-medium mb-2 text-trading-textMuted data-i18n="labelTickers">Stock Tickers (comma separated)</label>
+                    <label class="block text-sm font-medium mb-2 text-trading-textMuted" data-i18n="labelTickers">Stock Tickers (comma separated)</label>
                     <input type="text" id="tickers" required placeholder="AAPL, MSFT, TSLA" data-i18n-placeholder="placeholderTickers" class="w-full px-4 py-3 bg-trading-input border border-trading-border rounded-xl focus:ring-2 focus:ring-trading-primary outline-none text-white font-mono text-left uppercase shadow-inner dir-ltr">
                 </div>
 
                 <div class="grid grid-cols-2 gap-5">
                     <div>
                         <!-- כותרת שדה תאריך התחלה - תעודכן דינמית -->
-                        <label class="block text-sm font-medium mb-2 text-trading-textMuted data-i18n="labelStart">Start Date</label>
+                        <label class="block text-sm font-medium mb-2 text-trading-textMuted" data-i18n="labelStart">Start Date</label>
                         <input type="date" id="startDate" required class="w-full px-4 py-3 bg-trading-input border border-trading-border rounded-xl focus:ring-2 focus:ring-trading-primary outline-none text-white font-mono shadow-inner dir-ltr">
                     </div>
                     <div>
                         <!-- כותרת שדה תאריך סיום - תעודכן דינמית -->
-                        <label class="block text-sm font-medium mb-2 text-trading-textMuted data-i18n="labelEnd">End Date</label>
+                        <label class="block text-sm font-medium mb-2 text-trading-textMuted" data-i18n="labelEnd">End Date</label>
                         <input type="date" id="endDate" required class="w-full px-4 py-3 bg-trading-input border border-trading-border rounded-xl focus:ring-2 focus:ring-trading-primary outline-none text-white font-mono shadow-inner dir-ltr">
                     </div>
                 </div>
 
                 <div>
                     <!-- כותרת שדה תדירות - תעודכן דינמית -->
-                    <label class="block text-sm font-medium mb-2 text-trading-textMuted data-i18n="labelFrequency">Data Frequency</label>
+                    <label class="block text-sm font-medium mb-2 text-trading-textMuted" data-i18n="labelFrequency">Data Frequency</label>
                     <select id="frequency" required class="w-full px-4 py-3 bg-trading-input border border-trading-border rounded-xl focus:ring-2 focus:ring-trading-primary outline-none text-white appearance-none cursor-pointer shadow-inner">
                         <option value="1d" data-i18n="freqDaily">Daily</option>
                         <option value="1wk" data-i18n="freqWeekly">Weekly</option>
@@ -146,7 +146,7 @@
                 </div>
 
                 <button type="submit" id="submitBtn" class="w-full bg-trading-primary hover:bg-blue-500 text-white font-bold py-4 rounded-xl shadow-[0_0_20px_rgba(37,99,235,0.4)] transition-all flex justify-center items-center gap-3 mt-4 transform hover:-translate-y-1">
-                    <span id="btnText" class="text-lg data-i18n="btnGenerate">Generate Data Report</span>
+                    <span id="btnText" class="text-lg" data-i18n="btnGenerate">Generate Data Report</span>
                     <svg id="loadingIcon" class="hidden animate-spin h-6 w-6 text-white" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
                 </button>
             </form>
@@ -163,11 +163,11 @@
                 <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6">
                     <div class="flex items-center gap-3">
                         <div class="w-10 h-10 rounded-full bg-trading-success flex items-center justify-center shadow-[0_0_15px_rgba(16,185,129,0.5)]"><svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg></div>
-                        <h3 class="text-lg font-bold text-white data-i18n="resultReady">Data Ready</h3>
+                        <h3 class="text-lg font-bold text-white" data-i18n="resultReady">Data Ready</h3>
                     </div>
                     
                     <div class="flex gap-3 w-full sm:w-auto">
-                        <a id="sheetLink" href="#" target="_blank" class="flex-1 sm:flex-none text-center bg-transparent border border-trading-primary hover:bg-trading-primary/20 text-trading-primary font-bold py-2 px-4 rounded-lg transition-all text-sm data-i18n="btnSheets">
+                        <a id="sheetLink" href="#" target="_blank" class="flex-1 sm:flex-none text-center bg-transparent border border-trading-primary hover:bg-trading-primary/20 text-trading-primary font-bold py-2 px-4 rounded-lg transition-all text-sm" data-i18n="btnSheets">
                             Open in Sheets
                         </a>
                         <button id="downloadCsvBtn" class="flex-1 sm:flex-none flex justify-center items-center gap-2 bg-trading-success hover:bg-emerald-500 text-white font-bold py-2 px-4 rounded-lg transition-all shadow-lg text-sm">
@@ -177,7 +177,7 @@
                     </div>
                 </div>
 
-                <div class="mb-2 text-sm text-trading-textMuted data-i18n="previewTitle">Preview (up to first 10 rows):</div>
+                <div class="mb-2 text-sm text-trading-textMuted" data-i18n="previewTitle">Preview (up to first 10 rows):</div>
                 <div class="overflow-x-auto rounded-xl border border-trading-border bg-trading-input max-h-60 custom-scrollbar relative dir-ltr">
                     <table class="w-full text-xs text-left border-collapse whitespace-nowrap" id="previewTable">
                         <thead class="sticky top-0 bg-[#162032] text-trading-textBase shadow-md">
@@ -195,7 +195,7 @@
 
         const translations = {
             en: {
-                title: "Stock Data Fetch - Professional Trading Desk",
+                title: "Stock Data Desk - Professional Trading Desk",
                 tickerLoading: "Loading live market data...",
                 mainHeader: "Stock Data Desk",
                 welcomeTitle: "Welcome to the system",
@@ -225,7 +225,7 @@
                 warnPartial: "Report generated, but data is missing for: "
             },
             he: {
-                title: "משיכת נתוני מניות - דסק מסחר מקצועי",
+                title: "דסק נתוני מניות - דסק מסחר מקצועי",
                 tickerLoading: "טוען נתוני שוק חיים...",
                 mainHeader: "דסק נתוני מניות",
                 welcomeTitle: "ברוכים הבאים למערכת",
