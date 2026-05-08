@@ -1,8 +1,10 @@
 <!DOCTYPE html>
+<!-- השפה והכיווניות נקבעות דינמית ע"י ה-JS, ברירת המחדל היא אנגלית -->
 <html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- כותרת הדף תעודכן ע"י ה-JS -->
     <title>Stock Data Fetch - Professional Trading Desk</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -43,6 +45,9 @@
         }
     </script>
     <style>
+        /* תמיכה ביישור טקסט לוגי בהתאם לכיווניות (RTL/LTR) */
+        .text-start { text-align: start; }
+        
         body {
             background-color: #050b14;
             background-image: 
@@ -59,17 +64,26 @@
         .custom-scrollbar::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.5); }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(51, 65, 85, 0.8); border-radius: 4px; }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #2563eb; }
+
+        /* מניעת קפיצה של הביטוי IDT/שעון */
+        #liveClock { min-width: 100px; display: inline-block; }
     </style>
 </head>
-<body class="text-trading-textBase font-sans antialiased min-h-screen flex flex-col">
+<body class="text-trading-textBase font-sans antialiased min-h-screen flex flex-col relative">
 
-    <div class="w-full bg-black/80 border-b border-trading-border overflow-hidden flex items-center h-12 text-sm font-mono whitespace-nowrap shadow-md relative z-10 text-left">
+    <!-- כפתור החלפת שפה צף -->
+    <button id="langSwitcher" onclick="toggleLanguage()" class="fixed top-16 z-50 bg-trading-card/50 backdrop-blur-sm border border-trading-border p-2 rounded-full shadow-lg hover:bg-trading-primary/20 transition-all duration-300 ltr:right-4 rtl:left-4" title="Switch Language">
+        <!-- האייקון יעודכן ע"י ה-JS (דגל ישראל כשבאנגלית, דגל ארה"ב כשבעברית) -->
+        <span id="langFlag" class="text-2xl">🇺🇸</span>
+    </button>
+
+    <div class="w-full bg-black/80 border-b border-trading-border overflow-hidden flex items-center h-12 text-sm font-mono whitespace-nowrap shadow-md relative z-10 text-left dir-ltr">
         <div class="flex animate-marquee w-max" id="tickerWrapper">
             <div class="flex space-x-8 px-4 items-center live-tickers">
-                <span class="text-trading-textMuted">Loading live market data...</span>
+                <span class="text-trading-textMuted data-i18n="tickerLoading">Loading live market data...</span>
             </div>
             <div class="flex space-x-8 px-4 items-center live-tickers" aria-hidden="true">
-                <span class="text-trading-textMuted">Loading live market data...</span>
+                <span class="text-trading-textMuted data-i18n="tickerLoading">Loading live market data...</span>
             </div>
         </div>
     </div>
@@ -83,45 +97,47 @@
                     <span class="relative flex h-3 w-3"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-trading-success opacity-75"></span><span class="relative inline-flex rounded-full h-3 w-3 bg-trading-success"></span></span>
                     <span id="liveClock" class="text-xs text-trading-success font-mono tracking-widest">--:--:--</span>
                 </div>
-                <h1 class="text-3xl font-extrabold text-white mb-6 drop-shadow-md">Stock Data Desk</h1>
+                <h1 class="text-3xl font-extrabold text-white mb-6 drop-shadow-md data-i18n="mainHeader">Stock Data Desk</h1>
                 
                 <div class="max-w-lg mx-auto mb-8 bg-gradient-to-br from-slate-800/80 to-slate-900/80 p-5 rounded-xl border border-trading-primary/30 shadow-[0_0_15px_rgba(37,99,235,0.15)] relative overflow-hidden">
-                    <div class="absolute top-0 left-0 w-1 h-full bg-trading-primary"></div>
-                    <p class="text-sm leading-relaxed text-slate-200 text-left">
-                        <span class="font-bold text-blue-400 block mb-1 text-base">Welcome to the system</span>
-                        Generate a comprehensive trading data report for any stock in just seconds. The system provides accurate historical market data according to your defined timeframe, enabling fast and efficient trend analysis. All information is automatically aggregated and presented to you in a preview, with the option to download directly as a CSV file or work in the cloud.
+                    <!-- הפס הכחול זז לצד המתאים לפי הכיווניות -->
+                    <div class="absolute top-0 w-1 h-full bg-trading-primary ltr:left-0 rtl:right-0"></div>
+                    <p class="text-sm leading-relaxed text-slate-200 text-start">
+                        <span class="font-bold text-blue-400 block mb-1 text-base data-i18n="welcomeTitle">Welcome to the system</span>
+                        <span data-i18n="welcomeDesc">Generate a comprehensive trading data report for any stock in just seconds. The system provides accurate historical market data according to your defined timeframe, enabling fast and efficient trend analysis. All information is automatically aggregated and presented to you in a preview, with the option to download directly as a CSV file or work in the cloud.</span>
                     </p>
                 </div>
             </div>
 
             <form id="stockForm" class="space-y-6">
                 <div>
-                    <label class="block text-sm font-medium mb-2 text-trading-textMuted">Stock Tickers (comma separated)</label>
-                    <input type="text" id="tickers" required placeholder="AAPL, MSFT, TSLA" class="w-full px-4 py-3 bg-trading-input border border-trading-border rounded-xl focus:ring-2 focus:ring-trading-primary outline-none text-white font-mono text-left uppercase shadow-inner">
+                    <label class="block text-sm font-medium mb-2 text-trading-textMuted data-i18n="labelTickers">Stock Tickers (comma separated)</label>
+                    <!-- הוספת data-i18n-placeholder לתרגום הפלייסולדר -->
+                    <input type="text" id="tickers" required placeholder="AAPL, MSFT, TSLA" data-i18n-placeholder="placeholderTickers" class="w-full px-4 py-3 bg-trading-input border border-trading-border rounded-xl focus:ring-2 focus:ring-trading-primary outline-none text-white font-mono text-left uppercase shadow-inner dir-ltr">
                 </div>
 
                 <div class="grid grid-cols-2 gap-5">
                     <div>
-                        <label class="block text-sm font-medium mb-2 text-trading-textMuted">Start Date</label>
-                        <input type="date" id="startDate" required class="w-full px-4 py-3 bg-trading-input border border-trading-border rounded-xl focus:ring-2 focus:ring-trading-primary outline-none text-white font-mono shadow-inner">
+                        <label class="block text-sm font-medium mb-2 text-trading-textMuted data-i18n="labelStart">Start Date</label>
+                        <input type="date" id="startDate" required class="w-full px-4 py-3 bg-trading-input border border-trading-border rounded-xl focus:ring-2 focus:ring-trading-primary outline-none text-white font-mono shadow-inner dir-ltr">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium mb-2 text-trading-textMuted">End Date</label>
-                        <input type="date" id="endDate" required class="w-full px-4 py-3 bg-trading-input border border-trading-border rounded-xl focus:ring-2 focus:ring-trading-primary outline-none text-white font-mono shadow-inner">
+                        <label class="block text-sm font-medium mb-2 text-trading-textMuted data-i18n="labelEnd">End Date</label>
+                        <input type="date" id="endDate" required class="w-full px-4 py-3 bg-trading-input border border-trading-border rounded-xl focus:ring-2 focus:ring-trading-primary outline-none text-white font-mono shadow-inner dir-ltr">
                     </div>
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium mb-2 text-trading-textMuted">Data Frequency</label>
+                    <label class="block text-sm font-medium mb-2 text-trading-textMuted data-i18n="labelFrequency">Data Frequency</label>
                     <select id="frequency" required class="w-full px-4 py-3 bg-trading-input border border-trading-border rounded-xl focus:ring-2 focus:ring-trading-primary outline-none text-white appearance-none cursor-pointer shadow-inner">
-                        <option value="1d">Daily</option>
-                        <option value="1wk">Weekly</option>
-                        <option value="1mo">Monthly</option>
+                        <option value="1d" data-i18n="freqDaily">Daily</option>
+                        <option value="1wk" data-i18n="freqWeekly">Weekly</option>
+                        <option value="1mo" data-i18n="freqMonthly">Monthly</option>
                     </select>
                 </div>
 
                 <button type="submit" id="submitBtn" class="w-full bg-trading-primary hover:bg-blue-500 text-white font-bold py-4 rounded-xl shadow-[0_0_20px_rgba(37,99,235,0.4)] transition-all flex justify-center items-center gap-3 mt-4 transform hover:-translate-y-1">
-                    <span id="btnText" class="text-lg">Generate Data Report</span>
+                    <span id="btnText" class="text-lg data-i18n="btnGenerate">Generate Data Report</span>
                     <svg id="loadingIcon" class="hidden animate-spin h-6 w-6 text-white" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
                 </button>
             </form>
@@ -138,22 +154,22 @@
                 <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6">
                     <div class="flex items-center gap-3">
                         <div class="w-10 h-10 rounded-full bg-trading-success flex items-center justify-center shadow-[0_0_15px_rgba(16,185,129,0.5)]"><svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg></div>
-                        <h3 class="text-lg font-bold text-white">Data Ready</h3>
+                        <h3 class="text-lg font-bold text-white data-i18n="resultReady">Data Ready</h3>
                     </div>
                     
                     <div class="flex gap-3 w-full sm:w-auto">
-                        <a id="sheetLink" href="#" target="_blank" class="flex-1 sm:flex-none text-center bg-transparent border border-trading-primary hover:bg-trading-primary/20 text-trading-primary font-bold py-2 px-4 rounded-lg transition-all text-sm">
+                        <a id="sheetLink" href="#" target="_blank" class="flex-1 sm:flex-none text-center bg-transparent border border-trading-primary hover:bg-trading-primary/20 text-trading-primary font-bold py-2 px-4 rounded-lg transition-all text-sm data-i18n="btnSheets">
                             Open in Sheets
                         </a>
                         <button id="downloadCsvBtn" class="flex-1 sm:flex-none flex justify-center items-center gap-2 bg-trading-success hover:bg-emerald-500 text-white font-bold py-2 px-4 rounded-lg transition-all shadow-lg text-sm">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
-                            Download CSV
+                            <span data-i18n="btnCsv">Download CSV</span>
                         </button>
                     </div>
                 </div>
 
-                <div class="mb-2 text-sm text-trading-textMuted">Preview (up to first 10 rows):</div>
-                <div class="overflow-x-auto rounded-xl border border-trading-border bg-trading-input max-h-60 custom-scrollbar relative">
+                <div class="mb-2 text-sm text-trading-textMuted data-i18n="previewTitle">Preview (up to first 10 rows):</div>
+                <div class="overflow-x-auto rounded-xl border border-trading-border bg-trading-input max-h-60 custom-scrollbar relative dir-ltr">
                     <table class="w-full text-xs text-left border-collapse whitespace-nowrap" id="previewTable">
                         <thead class="sticky top-0 bg-[#162032] text-trading-textBase shadow-md">
                             <tr id="tableHeader"></tr>
@@ -166,11 +182,141 @@
     </div>
 
     <script>
+        // --- תשתיות בינאום (Internationalization - i18n) ---
+
+        const translations = {
+            en: {
+                title: "Stock Data Fetch - Professional Trading Desk",
+                tickerLoading: "Loading live market data...",
+                mainHeader: "Stock Data Desk",
+                welcomeTitle: "Welcome to the system",
+                welcomeDesc: "Generate a comprehensive trading data report for any stock in just seconds. The system provides accurate historical market data according to your defined timeframe, enabling fast and efficient trend analysis. All information is automatically aggregated and presented to you in a preview, with the option to download directly as a CSV file or work in the cloud.",
+                labelTickers: "Stock Tickers (comma separated)",
+                placeholderTickers: "AAPL, MSFT, TSLA",
+                labelStart: "Start Date",
+                labelEnd: "End Date",
+                labelFrequency: "Data Frequency",
+                freqDaily: "Daily",
+                freqWeekly: "Weekly",
+                freqMonthly: "Monthly",
+                btnGenerate: "Generate Data Report",
+                btnProcessing: "Processing data...",
+                resultReady: "Data Ready",
+                btnSheets: "Open in Sheets",
+                btnCsv: "Download CSV",
+                previewTitle: "Preview (up to first 10 rows):",
+                switcherTitle: "Switch to Hebrew",
+                // הודעות JS
+                errDateOrder: "Start date is later than end date.",
+                errFutureDate: "End date cannot be in the future.",
+                errEnglishOnly: "Stock tickers must be in English only.",
+                errNoTickers: "Enter at least one ticker.",
+                errNetwork: "Network error accessing Google server. Check your internet connection.",
+                errNoStocksFound: "None of the stocks were found.",
+                warnPartial: "Report generated, but data is missing for: "
+            },
+            he: {
+                title: "משיכת נתוני מניות - דסק מסחר מקצועי",
+                tickerLoading: "טוען נתוני שוק חיים...",
+                mainHeader: "דסק נתוני מניות",
+                welcomeTitle: "ברוכים הבאים למערכת",
+                welcomeDesc: "הפק דוח נתוני מסחר מקיף על כל מניה תוך שניות בודדות. המערכת מנגישה נתוני שוק היסטוריים מדויקים בהתאם לטווח הזמנים שתגדיר, ומאפשרת ניתוח מגמות יעיל ומהיר. כל המידע מאוגד אוטומטית ומוגש לך בתצוגה מקדימה, עם אפשרות להורדה ישירה כקובץ CSV או עבודה בענן.",
+                labelTickers: "סימולי מניות (מופרדים בפסיק)",
+                placeholderTickers: "למשל: AAPL, MSFT, TSLA",
+                labelStart: "תאריך התחלה",
+                labelEnd: "תאריך סיום",
+                labelFrequency: "תדירות נתונים",
+                freqDaily: "יומי",
+                freqWeekly: "שבועי",
+                freqMonthly: "חודשי",
+                btnGenerate: "הפק דוח נתונים",
+                btnProcessing: "מעבד נתונים...",
+                resultReady: "הנתונים מוכנים",
+                btnSheets: "פתח ב-Sheets",
+                btnCsv: "הורד CSV",
+                previewTitle: "תצוגה מקדימה (עד 10 שורות ראשונות):",
+                switcherTitle: "עבור לאנגלית",
+                // הודעות JS
+                errDateOrder: "תאריך התחלה מאוחר מתאריך סיום.",
+                errFutureDate: "תאריך סיום לא יכול להיות עתידי.",
+                errEnglishOnly: "סימולי מניות באנגלית בלבד.",
+                errNoTickers: "הזן לפחות מניה אחת.",
+                errNetwork: "שגיאת רשת בגישה לשרת גוגל. בדוק חיבור אינטרנט.",
+                errNoStocksFound: "אף אחת מהמניות לא נמצאה.",
+                warnPartial: "הדוח נוצר, אך חסרים נתונים עבור: "
+            }
+        };
+
+        // שפת ברירת מחדל או שפה שמורה ב-LocalStorage
+        let currentLang = localStorage.getItem('preferredLang') || 'en';
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('preferredLang', lang);
+            
+            const isRtl = lang === 'he';
+            const htmlTag = document.documentElement;
+            
+            // עדכון מאפייני ה-HTML הבסיסיים
+            htmlTag.lang = lang;
+            htmlTag.dir = isRtl ? 'rtl' : 'ltr';
+            
+            // עדכון כותרת הלשונית
+            document.title = translations[lang].title;
+
+            // עדכון אלמנטים עם data-i18n (טקסט פנימי)
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang][key]) {
+                    el.textContent = translations[lang][key];
+                }
+            });
+
+            // עדכון אלמנטים עם data-i18n-placeholder (פלייסולדרים)
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                const key = el.getAttribute('data-i18n-placeholder');
+                if (translations[lang][key]) {
+                    el.placeholder = translations[lang][key];
+                }
+            });
+
+            // עדכון כפתור מחליף השפה (מציג את דגל השפה הנגדית)
+            const flagEl = document.getElementById('langFlag');
+            const switcherBtn = document.getElementById('langSwitcher');
+            if (lang === 'en') {
+                flagEl.textContent = '🇮🇱'; // כשבאנגלית, הצע לעבור לעברית
+                switcherBtn.title = translations.en.switcherTitle;
+            } else {
+                flagEl.textContent = '🇺🇸'; // כשבעברית, הצע לעבור לאנגלית
+                switcherBtn.title = translations.he.switcherTitle;
+            }
+
+            // עדכון כפתור הסאבמיט אם הוא במצב טעינה
+            const btnTxt = document.getElementById('btnText');
+            const submitBtn = document.getElementById('submitBtn');
+            if (submitBtn.disabled && !document.getElementById('loadingIcon').classList.contains('hidden')) {
+                 btnTxt.textContent = translations[lang].btnProcessing;
+            }
+        }
+
+        function toggleLanguage() {
+            setLanguage(currentLang === 'en' ? 'he' : 'en');
+            // אם הטבלה פתוחה, צריך לרענן את ה-Header שלה כי הוא נוצר דינמית ב-JS
+            if (!document.getElementById('resultContainer').classList.contains('hidden') && lastFetchedData) {
+                renderTableHeader(lastFetchedData[0]);
+            }
+        }
+
+        // --- לוגיקת האפליקציה המקורית (עם התאמות לתרגום) ---
+
         // *** Paste the WEB APP URL you received from Google here ***
         const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzrXTJRUnFTSTXQmZXGwZDxhPlrjI9xuRzbQo2GJRvmZreG6P3c9qSSujSQAxBYLQ9H1g/exec';
 
         // Live Clock
-        setInterval(() => { document.getElementById('liveClock').textContent = new Date().toLocaleTimeString('en-US', { hour12: false }) + ' IDT'; }, 1000);
+        setInterval(() => { 
+            // השעון תמיד בפורמט אנגלי, רק הסיומת משתנה קלות
+            document.getElementById('liveClock').textContent = new Date().toLocaleTimeString('en-US', { hour12: false }) + ' IDT'; 
+        }, 1000);
         
         // Fetch live data for the stock ticker on page load
         const liveSymbols = ['^GSPC', '^IXIC', 'AAPL', 'MSFT', 'TSLA', 'NVDA', 'AMZN', 'META', 'GOOGL'];
@@ -191,7 +337,8 @@
                         if (res.data[sym]) {
                             const name = displayNames[sym] || sym;
                             const color = res.data[sym].direction === '▲' ? 'text-trading-success' : 'text-trading-danger';
-                            htmlStr += `<span class="text-trading-textMuted font-bold mx-5">${name} <span class="${color} ml-1">${res.data[sym].price} ${res.data[sym].direction} ${res.data[sym].change}%</span></span>`;
+                            // סרגל המניות תמיד משמאל לימין
+                            htmlStr += `<span class="text-trading-textMuted font-bold mx-5">${name} <span class="${color} ml-1 dir-ltr inline-block">${res.data[sym].price} ${res.data[sym].direction} ${res.data[sym].change}%</span></span>`;
                         }
                     });
                     
@@ -204,21 +351,32 @@
             }
         }
         
-        // Trigger live fetch immediately on load
-        fetchLiveTicker();
-
         let lastFetchedData = null; // Variable to store data for download
 
         // CSV Download function
         document.getElementById('downloadCsvBtn').addEventListener('click', () => {
             if (!lastFetchedData) return;
+            // הפיכת המערך ל-CSV
             const csvContent = lastFetchedData.map(row => row.join(",")).join("\n");
-            const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' }); // Add BOM for UTF-8
+            // הוספת BOM (Byte Order Mark) כדי שאקסל יזהה UTF-8 (חשוב לעברית אם תהיה בנתונים)
+            const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' }); 
             const link = document.createElement("a");
             link.href = URL.createObjectURL(blob);
             link.download = `Market_Data_${new Date().toISOString().slice(0,10)}.csv`;
             link.click();
         });
+
+        // פונקציה עזר לרינדור כותרת הטבלה (מופרדת כדי שנוכל לקרוא לה בהחלפת שפה)
+        function renderTableHeader(headerRow) {
+            // כותרות הטבלה מגיעות מה-API (באנגלית), נשאיר אותן ככה או נתרגם ידנית אם צריך.
+            // כרגע נשאיר כפי שהן מה-API.
+            const headersHTML = headerRow.map(h => `<th class="px-4 py-3 border-b border-trading-border text-left">${h}</th>`).join('');
+            document.getElementById('tableHeader').innerHTML = headersHTML;
+        }
+
+        // הפעלה ראשונית של השפה והטוקר
+        setLanguage(currentLang);
+        fetchLiveTicker();
 
         // Set default dates
         const today = new Date();
@@ -228,18 +386,21 @@
         document.getElementById('stockForm').addEventListener('submit', async (e) => {
             e.preventDefault(); 
             
+            const lang = translations[currentLang]; // קיצור דרך לתרגומים הנוכחיים
+
             ['errorContainer', 'warningContainer', 'resultContainer'].forEach(id => document.getElementById(id).classList.add('hidden'));
 
             const startDate = document.getElementById('startDate').value;
             const endDate = document.getElementById('endDate').value;
             const rawTickers = document.getElementById('tickers').value;
 
-            if (new Date(startDate) > new Date(endDate)) return showError('Start date is later than end date.');
-            if (new Date(endDate) > new Date()) return showError('End date cannot be in the future.');
-            if (!/^[A-Za-z0-9, \.]+$/.test(rawTickers)) return showError('Stock tickers must be in English only.');
+            // בדיקות ולידציה עם הודעות מתורגמות
+            if (new Date(startDate) > new Date(endDate)) return showError(lang.errDateOrder);
+            if (new Date(endDate) > new Date()) return showError(lang.errFutureDate);
+            if (!/^[A-Za-z0-9, \.]+$/.test(rawTickers)) return showError(lang.errEnglishOnly);
 
             const tickersArray = rawTickers.split(',').map(t => t.trim().toUpperCase()).filter(t => t !== '');
-            if (!tickersArray.length) return showError('Enter at least one ticker.');
+            if (!tickersArray.length) return showError(lang.errNoTickers);
 
             const payload = { tickers: tickersArray, startDate, endDate, frequency: document.getElementById('frequency').value };
 
@@ -247,11 +408,14 @@
             const icon = document.getElementById('loadingIcon');
             const btnTxt = document.getElementById('btnText');
             
-            btn.disabled = true; icon.classList.remove('hidden'); btnTxt.textContent = 'Processing data...';
+            // מצב טעינה
+            btn.disabled = true; 
+            icon.classList.remove('hidden'); 
+            btnTxt.textContent = lang.btnProcessing;
 
             try {
                 const response = await fetch(WEB_APP_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify(payload) });
-                if (!response.ok) throw new Error('Network error accessing Google server. Check your internet connection.');
+                if (!response.ok) throw new Error(lang.errNetwork);
                 
                 const data = await response.json();
 
@@ -260,33 +424,44 @@
                     document.getElementById('sheetLink').href = data.sheetUrl;
                     
                     if (data.data && data.data.length > 0) {
-                        const headersHTML = data.data[0].map(h => `<th class="px-4 py-3 border-b border-trading-border">${h}</th>`).join('');
-                        document.getElementById('tableHeader').innerHTML = headersHTML;
+                        // רינדור כותרות
+                        renderTableHeader(data.data[0]);
                         
+                        // רינדור שורות (דאטה גולמי - תמיד משמאל לימין)
                         const rowsHTML = data.data.slice(1, 11).map(row => 
-                            `<tr class="hover:bg-white/5 text-trading-textMuted">${row.map(cell => `<td class="px-4 py-2">${cell}</td>`).join('')}</tr>`
+                            `<tr class="hover:bg-white/5 text-trading-textMuted text-left">${row.map(cell => `<td class="px-4 py-2">${cell}</td>`).join('')}</tr>`
                         ).join('');
                         document.getElementById('tableBody').innerHTML = rowsHTML;
                     }
 
+                    // אזהרה על סימולים שנכשלו
                     if (data.failedTickers && data.failedTickers.length > 0) {
-                        document.getElementById('warningText').textContent = `Report generated, but data is missing for: ${data.failedTickers.join(', ')}`;
+                        document.getElementById('warningText').textContent = `${lang.warnPartial}${data.failedTickers.join(', ')}`;
                         document.getElementById('warningContainer').classList.remove('hidden');
                     }
                     
                     document.getElementById('resultContainer').classList.remove('hidden');
                 } else {
-                    throw new Error(data.message.includes('אף אחת') ? 'None of the stocks were found.' : data.message);
+                    // טיפול בשגיאות לוגיות מהשרת
+                    let msg = data.message;
+                    if (msg.includes('אף אחת') || msg.includes('None of the stocks')) {
+                        msg = lang.errNoStocksFound;
+                    }
+                    throw new Error(msg);
                 }
             } catch (err) {
                 showError(err.message);
             } finally {
-                btn.disabled = false; icon.classList.add('hidden'); btnTxt.textContent = 'Generate Data Report';
+                // ביטול מצב טעינה
+                btn.disabled = false; 
+                icon.classList.add('hidden'); 
+                btnTxt.textContent = lang.btnGenerate;
             }
         });
 
         function showError(msg) {
-            document.getElementById('errorText').textContent = msg.replace('Error:', '').trim();
+            // ניקוי "Error:" אם קיים בתחילת המחרוזת
+            document.getElementById('errorText').textContent = msg.replace(/^Error:\s*/, '').trim();
             document.getElementById('errorContainer').classList.remove('hidden');
         }
     </script>
